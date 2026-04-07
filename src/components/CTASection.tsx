@@ -18,7 +18,7 @@ const CTASection = ({ onGetStarted }: { onGetStarted?: () => void }) => {
             <p className="text-muted-foreground mb-8 max-w-md mx-auto">
               Start asking questions in natural language and get answers from any model, instantly.
             </p>
-            <button className="px-10 py-4 rounded-lg bg-primary text-primary-foreground font-heading font-semibold tracking-wide hover:shadow-[0_0_40px_hsl(var(--primary)/0.5)] transition-all duration-300">
+            <button onClick={onGetStarted} className="px-10 py-4 rounded-lg bg-primary text-primary-foreground font-heading font-semibold tracking-wide hover:shadow-[0_0_40px_hsl(var(--primary)/0.5)] transition-all duration-300">
               Get Started Free
             </button>
           </div>

@@ -55,7 +55,7 @@ const HeroSection = ({ onStartAnalyzing }: { onStartAnalyzing?: () => void }) =>
           transition={{ duration: 0.8, delay: 0.45 }}
           className="flex flex-col sm:flex-row gap-4 justify-center"
         >
-          <button className="px-8 py-3.5 rounded-lg bg-primary text-primary-foreground font-heading font-semibold text-sm tracking-wide hover:shadow-[0_0_30px_hsl(var(--primary)/0.4)] transition-all duration-300">
+          <button onClick={onStartAnalyzing} className="px-8 py-3.5 rounded-lg bg-primary text-primary-foreground font-heading font-semibold text-sm tracking-wide hover:shadow-[0_0_30px_hsl(var(--primary)/0.4)] transition-all duration-300">
             Start Analyzing
           </button>
           <button className="px-8 py-3.5 rounded-lg glass-card glow-border text-foreground font-heading font-semibold text-sm tracking-wide hover:bg-secondary/80 transition-all duration-300">
