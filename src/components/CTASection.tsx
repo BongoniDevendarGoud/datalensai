@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 
-const CTASection = () => {
+const CTASection = ({ onGetStarted }: { onGetStarted?: () => void }) => {
   return (
     <section className="py-24 relative">
       <div className="container mx-auto px-6">
