@@ -3,13 +3,16 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
+import { BarChart3, ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
-const AuthPage = () => {
+const AuthPage = ({ onBack }: { onBack?: () => void }) => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,17 +22,23 @@ const AuthPage = () => {
       if (isLogin) {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
+        navigate("/dashboard");
       } else {
-        const { error } = await supabase.auth.signUp({
+        const { data, error } = await supabase.auth.signUp({
           email,
           password,
           options: { emailRedirectTo: window.location.origin },
         });
         if (error) throw error;
-        toast({
-          title: "Check your email",
-          description: "We sent you a confirmation link to verify your account.",
-        });
+        // Auto-confirm is enabled, so user is logged in immediately
+        if (data.session) {
+          navigate("/dashboard");
+        } else {
+          toast({
+            title: "Check your email",
+            description: "We sent you a confirmation link to verify your account.",
+          });
+        }
       }
     } catch (err: any) {
       toast({ title: "Error", description: err.message, variant: "destructive" });
@@ -41,7 +50,20 @@ const AuthPage = () => {
   return (
     <div className="min-h-screen bg-background flex items-center justify-center px-4">
       <div className="glass-card glow-border p-8 w-full max-w-md">
+        {onBack && (
+          <button
+            onClick={onBack}
+            className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors mb-6"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back
+          </button>
+        )}
+
         <div className="text-center mb-8">
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <BarChart3 className="w-8 h-8 text-primary" />
+          </div>
           <h1 className="text-3xl font-heading font-bold">
             <span className="gradient-text">DataLens</span> AI
           </h1>
@@ -60,7 +82,7 @@ const AuthPage = () => {
           />
           <Input
             type="password"
-            placeholder="Password"
+            placeholder="Password (min 6 characters)"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
