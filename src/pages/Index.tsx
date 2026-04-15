@@ -12,18 +12,19 @@ const Index = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_, session) => {
+    // Check for existing session first
+    supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) navigate("/dashboard");
     });
 
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_, session) => {
       if (session?.user) navigate("/dashboard");
     });
 
     return () => subscription.unsubscribe();
   }, [navigate]);
 
-  if (showAuth) return <AuthPage />;
+  if (showAuth) return <AuthPage onBack={() => setShowAuth(false)} />;
 
   return (
     <main className="min-h-screen bg-background">
